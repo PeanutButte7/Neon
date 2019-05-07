@@ -7,6 +7,7 @@
         <e p="Scripts" t="Include">
           <e p="Enemy.cs" t="Include" />
           <e p="EnemyLineAttack.cs" t="Include" />
+          <e p="Glow.cs" t="Include" />
           <e p="Health.cs" t="Include" />
           <e p="PlayerController.cs" t="Include" />
           <e p="Projectile.cs" t="Include" />
