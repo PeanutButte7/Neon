@@ -15,6 +15,7 @@
             <e p="Weapon.cs" t="Include" />
           </e>
           <e p="Projectiles" t="Include">
+            <e p="EnemyDonutAttack.cs" t="Include" />
             <e p="EnemyLineAttack.cs" t="Include" />
             <e p="Projectile.cs" t="Include" />
           </e>

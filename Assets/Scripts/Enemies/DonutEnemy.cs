@@ -20,8 +20,10 @@ public class DonutEnemy : MonoBehaviour
 
     private Transform _player;
 
+    public GameObject attack;
+    public float timeBtwAttacks;
+    
     public GameObject deathEffect;
-    public GameObject deathAttack;
     public GameObject destroyEffect;
 
     void Start()
@@ -37,7 +39,7 @@ public class DonutEnemy : MonoBehaviour
         if (health <= 0)
         {
             Instantiate(deathEffect, transform.position, Quaternion.identity);
-            //Instantiate(deathAttack, transform.position, Quaternion.identity);
+            Instantiate(attack, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
 
@@ -46,13 +48,15 @@ public class DonutEnemy : MonoBehaviour
         {
             MoveRandomly();
         }
-        // When player is too close move away till it reaches idle distance
+        // When player is too close:
         else if (distanceFromPlayer <= moveAwayDistance)
         {
+            // ..move away from him
             if (moveAwayDistance >= distanceFromPlayer && distanceFromPlayer <= idleDistance || distanceFromPlayer < moveAwayDistance)
             {
                 transform.position = Vector2.MoveTowards(transform.position, _player.position, -speed * Time.deltaTime);
             }
+            // ..stand still and attack
         }
     }
 
