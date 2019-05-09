@@ -25,6 +25,7 @@ public class DonutEnemy : MonoBehaviour
     public GameObject attack;
     public float startTimeBtwAttacks;
     private float _timeBtwAttacks;
+    private float _distanceFromPlayer;
 
     void Start()
     {
@@ -34,7 +35,10 @@ public class DonutEnemy : MonoBehaviour
 
     void Update()
     {
-        float distanceFromPlayer = Vector2.Distance(transform.position, _player.position);
+        if (_player != null)
+        {
+            _distanceFromPlayer = Vector2.Distance(transform.position, _player.position);
+        }
 
         if (health <= 0)
         {
@@ -43,12 +47,12 @@ public class DonutEnemy : MonoBehaviour
         }
 
         // When player is too far:
-        if (distanceFromPlayer > idleDistanceTo)
+        if (_distanceFromPlayer > idleDistanceTo)
         {
             MoveRandomly();
         }
         // When player is too close:
-        else if (distanceFromPlayer < idleDistanceFrom)
+        else if (_distanceFromPlayer < idleDistanceFrom)
         {
             transform.position = Vector2.MoveTowards(transform.position, _player.position, -speed * Time.deltaTime);
         }
