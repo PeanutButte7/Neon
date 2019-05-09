@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,18 +12,29 @@ public class EnemyDonutAttack : MonoBehaviour
 
     void Start()
     {
-
         Invoke("DestroyProjectile", lifeTime); // Runs function after some time (lifetime)
     }
-
+    
     void Update()
     {
         transform.localScale += new Vector3(growSpeed, growSpeed, 0);
     }
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player")) 
+        {
+            // If player is not crouching
+            if (!GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().isCrouching)
+            {
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Health>().TakeDamage(damage);
+                Instantiate(destroyEffect, GameObject.FindGameObjectWithTag("Player").transform.position, Quaternion.identity);
+            }
+        }
+    }
 
     private void DestroyProjectile()
     {
-        Instantiate(destroyEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 }

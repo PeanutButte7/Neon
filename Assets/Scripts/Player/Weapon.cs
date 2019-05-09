@@ -12,16 +12,28 @@ public class Weapon : MonoBehaviour
     private float _timeBtwShots;
     public float startTimeBtwShots;
 
+    private PlayerController _playerController;
+    private Camera _camera;
+
+    void Start()
+    {
+        _playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        _camera = Camera.main;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position; // Gets position of cursor and subtracts object position thus gets difference
-        float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg; // Transfers angle to radians and then transfers it to degrees
-        transform.rotation = Quaternion.Euler(0f, 0f, rotZ + offset); // Applies rotation to the object
+        if (_camera != null)
+        {
+            Vector3 difference = _camera.ScreenToWorldPoint(Input.mousePosition) - transform.position; // Gets position of cursor and subtracts object position thus gets difference
+            float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg; // Transfers angle to radians and then transfers it to degrees
+            transform.rotation = Quaternion.Euler(0f, 0f, rotZ + offset); // Applies rotation to the object
+        }
 
         if (_timeBtwShots <= 0)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !_playerController.isCrouching)
             {
                 Instantiate(projectile, shotPoint.position, transform.rotation);
                 _timeBtwShots = startTimeBtwShots;

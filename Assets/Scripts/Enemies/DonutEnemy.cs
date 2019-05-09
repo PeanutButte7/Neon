@@ -8,9 +8,8 @@ public class DonutEnemy : MonoBehaviour
 {
     public int health;
     public float speed;
-    public int damage;
-    public float idleDistance;
-    public float moveAwayDistance;
+    public float idleDistanceFrom;
+    public float idleDistanceTo;
 
     public Transform moveSpot;
     public float minX;
@@ -20,11 +19,12 @@ public class DonutEnemy : MonoBehaviour
 
     private Transform _player;
 
-    public GameObject attack;
-    public float timeBtwAttacks;
-    
     public GameObject deathEffect;
     public GameObject destroyEffect;
+
+    public GameObject attack;
+    public float startTimeBtwAttacks;
+    private float _timeBtwAttacks;
 
     void Start()
     {
@@ -39,24 +39,31 @@ public class DonutEnemy : MonoBehaviour
         if (health <= 0)
         {
             Instantiate(deathEffect, transform.position, Quaternion.identity);
-            Instantiate(attack, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
 
-        // When player is too far move randomly
-        if (distanceFromPlayer > idleDistance)
+        // When player is too far:
+        if (distanceFromPlayer > idleDistanceTo)
         {
             MoveRandomly();
         }
         // When player is too close:
-        else if (distanceFromPlayer <= moveAwayDistance)
+        else if (distanceFromPlayer < idleDistanceFrom)
         {
-            // ..move away from him
-            if (moveAwayDistance >= distanceFromPlayer && distanceFromPlayer <= idleDistance || distanceFromPlayer < moveAwayDistance)
+            transform.position = Vector2.MoveTowards(transform.position, _player.position, -speed * Time.deltaTime);
+        }
+        // Stand still and attack
+        else
+        {
+            if (_timeBtwAttacks <= 0)
             {
-                transform.position = Vector2.MoveTowards(transform.position, _player.position, -speed * Time.deltaTime);
+                Instantiate(attack, transform.position, Quaternion.identity);
+                _timeBtwAttacks = startTimeBtwAttacks;
             }
-            // ..stand still and attack
+            else
+            {
+                _timeBtwAttacks -= Time.deltaTime;
+            }
         }
     }
 
