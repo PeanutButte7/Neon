@@ -7,6 +7,7 @@
         <e p="Scripts" t="Include">
           <e p="Enemies" t="Include">
             <e p="DonutEnemy.cs" t="Include" />
+            <e p="DonutEnemySpawner.cs" t="Include" />
             <e p="SuicideEnemy.cs" t="Include" />
           </e>
           <e p="Player" t="Include">

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1847826857433605016}
   m_Layer: 15
   m_Name: DonutAttack
-  m_TagString: DonutEnemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

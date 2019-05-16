@@ -26,13 +26,13 @@ public class Projectile : MonoBehaviour
             if (hitInfo.collider.CompareTag("SuicideEnemy"))
             {
                 hitInfo.collider.GetComponent<SuicideEnemy>().TakeDamage(damage);
+                DestroyProjectile();
             } 
             else if (hitInfo.collider.CompareTag("DonutEnemy"))
             {
                 hitInfo.collider.GetComponent<DonutEnemy>().TakeDamage(damage); 
+                DestroyProjectile();
             }
-
-            DestroyProjectile();
         }
         
         transform.Translate(Time.deltaTime * speed * Vector2.up);
