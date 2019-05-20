@@ -1,72 +1,84 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Player;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class SuicideEnemy : MonoBehaviour
+namespace Enemies
 {
-    public int health;
-    public float speed;
-    public int damage;
-    public float idleDistance;
+    public class SuicideEnemy : MonoBehaviour
+    {
+        public ScoreManager scoreManager;
+        public int health;
+        public float speed;
+        public int damage;
+        public float idleDistance;
 
-    public Transform moveSpot;
-    public float minX;
-    public float maxX;
-    public float minY;
-    public float maxY;
+        public Transform moveSpot;
+        public float minX;
+        public float maxX;
+        public float minY;
+        public float maxY;
 
-    private Transform _player;
+        private Transform _player;
 
-    public GameObject deathEffect;
-    public GameObject deathAttack;
-    public GameObject destroyEffect;
+        public GameObject deathEffect;
+        public GameObject deathAttack;
+        public GameObject destroyEffect;
     
-    void Start()
-    {
-        _player = GameObject.FindGameObjectWithTag("Player").transform;
-        moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
-    }
-
-    void Update()
-    {
-        if (health <= 0)
+        void Start()
         {
-            Instantiate(deathEffect, transform.position, Quaternion.identity);
-            Instantiate(deathAttack, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            _player = GameObject.FindGameObjectWithTag("Player").transform;
+
+            moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
         }
 
-        // When player is too far do:
-        if (Vector2.Distance(transform.position, _player.position) > idleDistance)
+        void Update()
         {
-            transform.position = Vector2.MoveTowards(transform.position, moveSpot.position, speed * Time.deltaTime);
-            
-            if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f)
+            if (health <= 0)
             {
-                moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+                Instantiate(deathEffect, transform.position, Quaternion.identity);
+                Instantiate(deathAttack, transform.position, Quaternion.identity);
+                scoreManager.score = 1;
+                
+                Destroy(gameObject);
+
+                return;
+            }
+
+            if (_player == null)
+            {
+                return;
+            }
+
+            // When player is too far do:
+            if (Vector2.Distance(transform.position, _player.position) > idleDistance)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, moveSpot.position, speed * Time.deltaTime);
+            
+                if (Vector2.Distance(transform.position, moveSpot.position) < 0.2f)
+                {
+                    moveSpot.position = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+                }
+            }
+            // When player is too close do:
+            else if (Vector2.Distance(transform.position, _player.position) <= idleDistance)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, _player.position, speed * Time.deltaTime);
             }
         }
-        // When player is too close do:
-        else if (Vector2.Distance(transform.position, _player.position) <= idleDistance)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, _player.position, speed * Time.deltaTime);
-        }
-    }
     
-    public void TakeDamage(int damage)
-    {
-        health -= damage;
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player")) 
+        public void TakeDamage(int damage)
         {
-            Destroy(gameObject);
-            Instantiate(destroyEffect, transform.position, Quaternion.identity);
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Health>().TakeDamage(damage);
+            health -= damage;
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.CompareTag("Player")) 
+            {
+                Destroy(gameObject);
+                Instantiate(destroyEffect, transform.position, Quaternion.identity);
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Health>().TakeDamage(damage);
+            }
         }
     }
 }

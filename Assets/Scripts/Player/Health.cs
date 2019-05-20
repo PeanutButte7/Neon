@@ -1,54 +1,55 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Health : MonoBehaviour
+namespace Player
 {
-    public int health;
-    public int maxHearts;
-
-    public Image[] hearts;
-    public Sprite fullHeart;
-    public Sprite emptyHeart;
-
-    // Update is called once per frame
-    void Update()
+    public class Health : MonoBehaviour
     {
-        if (health <= 0)
+        public int health;
+        public int maxHearts;
+
+        public Image[] hearts;
+        public Sprite fullHeart;
+        public Sprite emptyHeart;
+
+        // Update is called once per frame
+        void Update()
         {
-            Destroy(gameObject);
+            if (health <= 0)
+            {
+                Destroy(gameObject);
+            }
+
+            if (health > maxHearts)
+            {
+                health = maxHearts;
+            }
+
+            for (int i = 0; i < hearts.Length; i++)
+            {
+                if (i < health)
+                {
+                    hearts[i].sprite = fullHeart;
+                }
+                else
+                {
+                    hearts[i].sprite = emptyHeart;
+                }
+
+                if (i < maxHearts)
+                {
+                    hearts[i].enabled = true;
+                }
+                else
+                {
+                    hearts[i].enabled = false;
+                }
+            }
         }
 
-        if (health > maxHearts)
+        public void TakeDamage(int damage)
         {
-            health = maxHearts;
+            health -= damage;
         }
-
-        for (int i = 0; i < hearts.Length; i++)
-        {
-            if (i < health)
-            {
-                hearts[i].sprite = fullHeart;
-            }
-            else
-            {
-                hearts[i].sprite = emptyHeart;
-            }
-
-            if (i < maxHearts)
-            {
-                hearts[i].enabled = true;
-            }
-            else
-            {
-                hearts[i].enabled = false;
-            }
-        }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        health -= damage;
     }
 }
