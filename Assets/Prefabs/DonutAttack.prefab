@@ -253,6 +253,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeTime: 5
   damage: 1
-  growSpeed: 0.05
+  growSpeed: 0.03
   destroyEffect: {fileID: 2381256728533335564, guid: 705d494149d4b3f40ad7a85033fba340,
     type: 3}
